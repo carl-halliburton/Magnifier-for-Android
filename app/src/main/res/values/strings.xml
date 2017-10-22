@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ReadingMagnifier</string>
+    <string name="app_name">Magnifier</string>
     <string name="action_settings">Settings</string>
     <string name="action_light">Light</string>
 </resources>
