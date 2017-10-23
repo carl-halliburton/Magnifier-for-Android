@@ -16,4 +16,11 @@
         android:icon="@drawable/ic_light_outline_white"
         android:orderInCategory="2"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_camera"
+        android:title="@string/action_camera"
+        android:icon="@drawable/ic_camera_alt_white"
+        android:orderInCategory="3"
+        app:showAsAction="always" />
 </menu>

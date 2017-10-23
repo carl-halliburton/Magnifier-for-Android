@@ -1,6 +1,8 @@
 package nz.co.carlhalliburton.readingmagnifier;
 
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
     public static Camera camera;
     public static boolean lightStatus;
 
-    private FrameLayout cameraPreviewLayout;
+    private ImageSurfaceView mImageSurfaceView;
+    private RelativeLayout cameraPreviewLayout;
     private ImageView capturedImageHolder;
 
     @Override
@@ -29,9 +33,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        cameraPreviewLayout = (RelativeLayout)findViewById(R.id.camera_preview);
+        //capturedImageHolder = (ImageView)findViewById(R.id.captured_image);
+
         camera = checkDeviceCamera();
+
+        mImageSurfaceView = new ImageSurfaceView(MainActivity.this, camera);
+        cameraPreviewLayout.addView(mImageSurfaceView);
+
         lightStatus = false; //false off, true on
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -54,16 +67,11 @@ public class MainActivity extends AppCompatActivity {
         else if (id == R.id.action_settings) {
             return true;
         }
+        else if (id == R.id.action_camera) {
+            //camera.takePicture(null, null, pictureCallback);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void toggleFlash() {
-        View v = findViewById(android.R.id.content);
-
-        if (lightStatus) //true
-            toggleLightOff(v);
-        else //false
-            toggleLightOn(v);
     }
 
     private Camera checkDeviceCamera() {
@@ -74,6 +82,17 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return camera;
+    }
+
+    //Manage led flash
+    //---------------------------------------------------------------------------------------------
+    public void toggleFlash() {
+        View v = findViewById(android.R.id.content);
+
+        if (lightStatus) //true
+            toggleLightOff(v);
+        else //false
+            toggleLightOn(v);
     }
 
     public void toggleLightOn(View v) {
@@ -88,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         Camera.Parameters parameters = camera.getParameters();
         parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
         camera.setParameters(parameters);
-        camera.stopPreview();
         lightStatus = false;
     }
 }
