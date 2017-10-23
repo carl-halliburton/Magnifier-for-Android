@@ -10,6 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,14 +20,17 @@ public class MainActivity extends AppCompatActivity {
     public static Camera camera;
     public static boolean lightStatus;
 
+    private FrameLayout cameraPreviewLayout;
+    private ImageView capturedImageHolder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        camera = checkDeviceCamera();
         lightStatus = false; //false off, true on
-        camera = Camera.open();
     }
 
     @Override
@@ -45,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
             toggleFlash();
             return true;
         }
+        else if (id == R.id.action_settings) {
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -55,6 +64,16 @@ public class MainActivity extends AppCompatActivity {
             toggleLightOff(v);
         else //false
             toggleLightOn(v);
+    }
+
+    private Camera checkDeviceCamera() {
+        Camera camera = null;
+        try {
+            camera = Camera.open();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return camera;
     }
 
     public void toggleLightOn(View v) {
