@@ -1,21 +1,13 @@
 package nz.co.carlhalliburton.readingmagnifier;
 
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,20 +16,19 @@ public class MainActivity extends AppCompatActivity {
     public static boolean lightStatus;
 
     private ImageSurfaceView mImageSurfaceView;
-    private RelativeLayout cameraPreviewLayout;
-    private ImageView capturedImageHolder;
+    private FrameLayout cameraPreviewLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
         setSupportActionBar(toolbar);
 
-        cameraPreviewLayout = (RelativeLayout)findViewById(R.id.camera_preview);
-        //capturedImageHolder = (ImageView)findViewById(R.id.captured_image);
+        cameraPreviewLayout = (FrameLayout) findViewById(R.id.camera_preview);
 
-        camera = checkDeviceCamera();
+        checkDeviceCamera();
 
         mImageSurfaceView = new ImageSurfaceView(MainActivity.this, camera);
         cameraPreviewLayout.addView(mImageSurfaceView);
@@ -68,14 +59,13 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         else if (id == R.id.action_camera) {
-            //camera.takePicture(null, null, pictureCallback);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private Camera checkDeviceCamera() {
-        Camera camera = null;
+        camera = null;
         try {
             camera = Camera.open();
         } catch (Exception e) {
